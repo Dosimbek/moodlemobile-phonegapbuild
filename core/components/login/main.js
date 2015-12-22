@@ -40,10 +40,10 @@ angular.module('mm.core.login', [])
         url: '/sites',
         templateUrl: 'core/components/login/templates/sites.html',
         controller: 'mmLoginSitesCtrl',
-        onEnter: function($state, $mmSitesManager) {
+        onEnter: function($mmLoginHelper, $mmSitesManager) {
             // Skip this page if there are no sites yet.
             $mmSitesManager.hasNoSites().then(function() {
-                $state.go('mm_login.site');
+                $mmLoginHelper.goToAddSite();
             });
         }
     })
@@ -51,10 +51,13 @@ angular.module('mm.core.login', [])
     .state('mm_login.site', {
         url: '/site',
         templateUrl: 'core/components/login/templates/site.html',
-        controller: 'mmLoginSiteCtrl'
+        controller: 'mmLoginSiteCtrl',
+		onEnter: function($state) {
+        $state.go('mm_login.credentials', {siteurl: 'http://e.neu.kz'});
+    }
     })
 
-    .state('mm_login.credentials', {
+     .state('mm_login.credentials', {
         url: '/cred',
         templateUrl: 'core/components/login/templates/credentials.html',
         controller: 'mmLoginCredentialsCtrl',
@@ -68,7 +71,6 @@ angular.module('mm.core.login', [])
             }
         }
     })
-
     .state('mm_login.reconnect', {
         url: '/reconnect',
         templateUrl: 'core/components/login/templates/reconnect.html',
